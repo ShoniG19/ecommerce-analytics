@@ -98,22 +98,3 @@ De **93.358 clientes compradores**, **2.801** tienen más de un pedido entregado
 `customer_unique_id`, no `customer_id`, para reconocer al mismo cliente.
 
 Evidencia: [indicadores SQL](referencias_sql/indicadores_06.csv) y sección de recurrencia del notebook.
-
-## Prioridades sugeridas
-
-| Prioridad | Investigación o acción | Cómo evaluar el avance |
-| --- | --- | --- |
-| Logística | Localizar segmentos con retrasos frecuentes y alto volumen afectado. | Tasa de tardanza, cantidad de pedidos afectados y días de demora. |
-| Experiencia | Revisar comunicación y atención de pedidos con retraso. | Puntuación por pedido, proporción de calificaciones bajas y cobertura de reseñas. |
-| Comercial | Planificar capacidad en categorías relevantes y períodos de mayor demanda. | Pedidos, artículos, valor de mercancía y cumplimiento de entrega. |
-| Recurrencia | Estudiar la segunda compra con cohortes y tiempos de observación comparables. | Recompra dentro de una ventana fija; no solo el porcentaje global. |
-
-Estas acciones son propuestas derivadas de un análisis descriptivo. El dataset no permite cuantificar por sí solo el retorno económico de implementarlas.
-
-## Trazabilidad y validación
-
-Se comprobaron **14 indicadores generales y 45 comparaciones de categorías y satisfacción** entre Pandas y referencias SQL, sin diferencias al nivel de precisión definido. Esto valida consistencia de cálculos, no garantiza que todas las interacciones de Power BI sean correctas; esas se revisan en el informe.
-
-Las referencias SQL están versionadas en [referencias_sql](referencias_sql/README.md). Los CSV y figuras de `report/resultados_pandas/` se regeneran al ejecutar el notebook y están excluidos del versionado. Los resultados mensuales, de calidad y distribución también pueden consultarse en sus salidas guardadas.
-
-Las [capturas del dashboard](../powerbi/capturas/) son evidencia visual complementaria del informe real. Muestran el período 04/09/2016–17/10/2018 y todos los estados del cliente seleccionados.
