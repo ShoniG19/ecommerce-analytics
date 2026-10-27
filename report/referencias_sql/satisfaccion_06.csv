@@ -1,0 +1,4 @@
+﻿estado_entrega,pedidos_entregados,pedidos_con_puntuacion_valida,pedidos_sin_puntuacion_valida,puntuaciones_invalidas,cobertura_resenas_porcentaje,puntuacion_media_por_pedido,pedidos_calificacion_baja,porcentaje_calificaciones_bajas
+Tardio,6534,6381,153,0,97.66,2.27,3979,62.36
+A tiempo,89936,89443,493,0,99.45,4.29,8257,9.23
+Sin clasificar,8,8,0,0,100.00,4.50,1,12.50

@@ -1,0 +1,52 @@
+# Datos fuente locales
+data/*
+!data/README.md
+
+# Entornos y cachés de Python
+.venv/
+venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Resultados generados por la exploración
+report/resultados_pandas/*
+!report/resultados_pandas/.gitkeep
+
+# Archivos de Power BI locales y temporales
+*.pbix
+*.pbit
+*.pbip
+powerbi/.pbi/
+powerbi/.alcache/
+
+# Configuración local y credenciales
+.env
+.env.*
+!.env.example
+*.local
+
+# Archivos del sistema y del editor
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.code-workspace
+
+# Logs, temporales y archivos comprimidos
+*.log
+*.tmp
+*.temp
+*.bak
+*.zip
+*.7z

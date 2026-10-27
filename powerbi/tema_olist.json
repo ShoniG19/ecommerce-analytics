@@ -1,0 +1,40 @@
+{
+  "name": "Olist Business Analytics",
+  "dataColors": [
+    "#0F4C5C",
+    "#1976A3",
+    "#2A9D8F",
+    "#2E8B57",
+    "#F4A261",
+    "#E9C46A",
+    "#E76F51",
+    "#6C63A8",
+    "#52B5A8",
+    "#80C9BE"
+  ],
+  "background": "#F4F6F8",
+  "foreground": "#172B3A",
+  "tableAccent": "#1976A3",
+  "textClasses": {
+    "callout": {
+      "fontFace": "Segoe UI",
+      "fontSize": 28,
+      "color": "#172B3A"
+    },
+    "title": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 14,
+      "color": "#172B3A"
+    },
+    "header": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 11,
+      "color": "#172B3A"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 10,
+      "color": "#5B6B7A"
+    }
+  }
+}

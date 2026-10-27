@@ -1,0 +1,15 @@
+indicador,valor_sql
+pedidos_entregados,96478
+clientes_compradores,93358
+articulos_vendidos,110197
+valor_mercancia_observado,13221498.11
+importe_flete_observado,2198275.64
+valor_medio_por_pedido,137.04
+precio_medio_articulo,119.98
+pedidos_evaluables,96470
+pedidos_sin_clasificacion,8
+pedidos_tardios,6534
+porcentaje_tardios,6.77
+dias_promedio_retraso,10.62
+clientes_recurrentes,2801
+porcentaje_recurrencia,3.00
