@@ -1,20 +1,14 @@
 # Datos del proyecto
 
-Este directorio contiene el dataset público de **Olist Brazilian E-Commerce**, un
-conjunto de datos transaccionales de una plataforma de comercio electrónico de
-Brasil. Las tablas permiten analizar clientes, pedidos, productos, vendedores,
-pagos, reseñas, logística y geolocalización.
+Este directorio contiene el dataset público de **Olist Brazilian E-Commerce**, un conjunto de datos transaccionales de una plataforma de comercio electrónico de Brasil. Las tablas permiten analizar clientes, pedidos, productos, vendedores, pagos, reseñas, logística y geolocalización.
 
-Los archivos están en formato CSV, utilizan coma como separador y tienen una
-fila de encabezados. Los identificadores son cadenas hexadecimales y las fechas
-se almacenan como texto con el formato `YYYY-MM-DD HH:MM:SS` (salvo las fechas
-que solo contienen `YYYY-MM-DD 00:00:00`).
+Los archivos están en formato CSV, utilizan coma como separador y tienen una fila de encabezados. Los identificadores de pedidos, clientes, productos, vendedores y reseñas son cadenas hexadecimales; los números secuenciales de artículos y pagos son enteros. Las fechas no vacías se almacenan como texto con el formato `YYYY-MM-DD HH:MM:SS`, algunas con hora `00:00:00`. Los importes monetarios se expresan en reales brasileños (BRL).
 
 ## Archivos disponibles
 
 | Archivo | Filas* | Descripción |
 | --- | ---: | --- |
-| `olist_customers_dataset.csv` | 99.441 | Dirección asociada al pedido y ciudad/estado del cliente. |
+| `olist_customers_dataset.csv` | 99.441 | Identificadores del cliente y ubicación asociada al pedido. |
 | `olist_geolocation_dataset.csv` | 1.000.163 | Coordenadas geográficas por prefijo de código postal. |
 | `olist_order_items_dataset.csv` | 112.650 | Productos incluidos en cada pedido, vendedor, precio y flete. |
 | `olist_order_payments_dataset.csv` | 103.886 | Métodos, cuotas y valores de pago de los pedidos. |
@@ -24,10 +18,7 @@ que solo contienen `YYYY-MM-DD 00:00:00`).
 | `olist_sellers_dataset.csv` | 3.095 | Identificador, ubicación y estado del vendedor. |
 | `product_category_name_translation.csv` | 71 | Traducción de categorías del portugués al inglés. |
 
-\* Cantidad de registros observada en los archivos, sin contar el encabezado.
-En `olist_order_reviews_dataset.csv` algunos comentarios contienen saltos de
-línea dentro de campos entrecomillados; por eso el número de registros no
-coincide con el número de líneas físicas del archivo.
+\* Cantidad de registros observada en los archivos, sin contar el encabezado. En `olist_order_reviews_dataset.csv` algunos comentarios contienen saltos de línea dentro de campos entrecomillados; por eso el número de registros no coincide con el número de líneas físicas del archivo.
 
 ## Diccionario de datos
 
@@ -35,7 +26,7 @@ coincide con el número de líneas físicas del archivo.
 
 | Columna | Descripción |
 | --- | --- |
-| `customer_id` | Identificador de la dirección utilizada en el pedido. |
+| `customer_id` | Identificador del cliente asociado a un pedido concreto; una misma persona recibe distintos valores en diferentes pedidos. |
 | `customer_unique_id` | Identificador único del cliente; un cliente puede tener varios `customer_id`. |
 | `customer_zip_code_prefix` | Prefijo del código postal del cliente. |
 | `customer_city` | Ciudad del cliente. |
@@ -85,8 +76,8 @@ coincide con el número de líneas físicas del archivo.
 | `review_score` | Puntuación de 1 a 5. |
 | `review_comment_title` | Título opcional del comentario. |
 | `review_comment_message` | Mensaje opcional del comentario. |
-| `review_creation_date` | Fecha de creación de la reseña. |
-| `review_answer_timestamp` | Fecha y hora de respuesta a la reseña. |
+| `review_creation_date` | Fecha de envío de la encuesta de satisfacción al cliente. |
+| `review_answer_timestamp` | Fecha y hora en que el cliente respondió la encuesta de satisfacción. |
 
 ### `olist_products_dataset.csv`
 
@@ -121,10 +112,7 @@ coincide con el número de líneas físicas del archivo.
 | `geolocation_city` | Ciudad asociada al prefijo. |
 | `geolocation_state` | Estado brasileño asociado al prefijo. |
 
-Esta tabla puede contener varias coordenadas para un mismo prefijo postal. No
-debe tratarse automáticamente como una tabla con una fila única por código
-postal; para obtener una coordenada representativa es necesario definir una
-regla de agregación.
+Esta tabla puede contener varias coordenadas para un mismo prefijo postal. No debe tratarse automáticamente como una tabla con una fila única por código postal; para obtener una coordenada representativa es necesario definir una regla de agregación.
 
 ### `product_category_name_translation.csv`
 
@@ -136,7 +124,7 @@ regla de agregación.
 ## Relaciones principales
 
 ```text
-customers (1) ──── (N) orders
+customers (1) ──── (1) orders   [por customer_id en estos archivos]
 orders    (1) ──── (N) order_items ──── (N:1) products
 orders    (1) ──── (N) order_items ──── (N:1) sellers
 orders    (1) ──── (N) order_payments
@@ -144,26 +132,20 @@ orders    (1) ──── (N) order_reviews
 products  (N) ──── (1) product_category_name_translation
 ```
 
-Las tablas de artículos y pagos son de detalle: un pedido puede tener varios
-artículos, vendedores o registros de pago. Por eso, al combinar varias tablas
-de detalle directamente con `orders`, se pueden multiplicar filas y
-sobrestimar métricas. Para calcular ventas, pagos o reseñas conviene agregar
-cada tabla al nivel de `order_id` antes de unirlas.
+La relación 1:1 entre `customers` y `orders` describe los datos observados en estos archivos. Una persona puede realizar varios pedidos; se identifica mediante `customer_unique_id`. El esquema muestra las relaciones principales, pero no garantiza que todos los pedidos tengan artículos, pagos o reseñas, ni que todas las categorías tengan traducción.
+
+Las tablas de artículos y pagos son de detalle: un pedido puede tener varios artículos, vendedores o registros de pago. Por eso, al combinar varias tablas de detalle directamente con `orders`, se pueden multiplicar filas y sobrestimar métricas. Para análisis a nivel de pedido, conviene agregar cada tabla de detalle al nivel de `order_id` antes de combinarlas. Para analizar artículos o categorías, se conserva el detalle necesario y se controla que las uniones no multipliquen sus filas.
 
 ## Recomendaciones de uso
 
-- Parsear las columnas de fecha como `datetime`.
-- Convertir `price`, `freight_value` y `payment_value` a valores numéricos.
-- Mantener los identificadores como texto para conservar ceros iniciales y
-  evitar conversiones numéricas.
-- Tratar los campos de comentarios y varias dimensiones de producto como
-  valores potencialmente nulos.
-- Usar `customer_unique_id` para análisis de clientes y recurrencia; usar
-  `customer_id` para relacionar pedidos con la dirección registrada.
-- Usar `product_category_name_translation.csv` como tabla auxiliar opcional
-  para mostrar las categorías en inglés.
-- Considerar que las fechas de entrega pueden ser nulas cuando el pedido no
-  llegó a esa etapa del proceso.
+- Conservar los CSV originales sin modificaciones y trabajar sobre copias o datos derivados.
+- Convertir las columnas de fecha a un tipo de fecha y hora antes de analizarlas, comprobando valores vacíos o no válidos.
+- Representar los importes en reales brasileños mediante decimales exactos o centavos enteros para evitar errores de precisión en los cálculos.
+- Mantener los identificadores hexadecimales y los prefijos postales como texto. Estos últimos pueden contener ceros iniciales.
+- Tratar los comentarios y varias dimensiones de producto como valores potencialmente nulos. Un dato ausente no equivale automáticamente a cero.
+- Usar `customer_unique_id` para identificar personas y estudiar recurrencia; usar `customer_id` para relacionar pedidos con el registro de cliente asociado.
+- Usar la tabla de traducción para mostrar categorías en inglés, considerando que puede haber categorías sin traducción o productos sin categoría.
+- Considerar que las fechas de entrega pueden faltar porque el pedido no llegó a esa etapa o por datos incompletos. En estos archivos hay 8 pedidos con estado `delivered` sin fecha de entrega al cliente; su puntualidad no puede determinarse con las fechas disponibles.
 
 ## Origen
 
